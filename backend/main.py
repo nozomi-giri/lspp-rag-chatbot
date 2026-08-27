@@ -19,10 +19,12 @@ load_dotenv()
 
 app = FastAPI(title="LSPP RAG Chatbot API")
 from fastapi.middleware.cors import CORSMiddleware
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://vercel.com/nozomiii/lspp-rag-chatbot/DQRAKrbrvVBtcaFmggDdNWSJU3nC"],  # TODO: restrict to actual frontend URL after deploying
+    allow_origins=[
+        "http://localhost:5173",
+        "https://lspp-rag-chatbot.vercel.app",
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
