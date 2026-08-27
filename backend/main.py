@@ -1,11 +1,3 @@
-"""
-FastAPI backend — Level 6.
-
-Reuses the exact same RAG core from backend/rag/pipeline.py.
-Stateless per-request except for the single currently-loaded PDF,
-which is kept in memory as a global (fine for a single-user demo).
-"""
-
 import os
 import shutil
 import time
@@ -30,7 +22,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # TODO: restrict to actual frontend URL after deploying
+    allow_origins=["https://vercel.com/nozomiii/lspp-rag-chatbot/DQRAKrbrvVBtcaFmggDdNWSJU3nC"],  # TODO: restrict to actual frontend URL after deploying
     allow_methods=["*"],
     allow_headers=["*"],
 )
