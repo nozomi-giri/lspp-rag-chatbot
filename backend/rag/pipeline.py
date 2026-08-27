@@ -181,7 +181,16 @@ def format_citations(docs):
     """Level 4: build a 'Sources' line from the page numbers of the
     chunks actually retrieved for this answer -- never the whole
     document by default. Uses page_label metadata (human-readable,
-    1-indexed) that PyPDFLoader attaches to every chunk."""
+    1-indexed) that PyPDFLoader attaches to every chunk, and the
+    actual source filename so citations are correct regardless of
+    which PDF was uploaded."""
+    if not docs:
+        return ""
+
+    # Get the actual filename from metadata instead of hardcoding it
+    source_path = docs[0].metadata.get("source", "document")
+    source_name = os.path.splitext(os.path.basename(source_path))[0]
+
     pages = sorted(set(int(d.metadata.get("page_label", d.metadata.get("page", 0))) for d in docs))
     if not pages:
         return ""
@@ -198,7 +207,7 @@ def format_citations(docs):
 
     parts = [str(a) if a == b else f"{a}\u2013{b}" for a, b in ranges]
     label = "pp." if len(pages) > 1 else "p."
-    return f"**Sources:**\n- The LSPP Playbook \u2014 {label} " + ", ".join(parts)
+    return f"**Sources:**\n- {source_name} \u2014 {label} " + ", ".join(parts)
 
 
 def build_qa_components(pdf_path, pages_needing_fix=None, chunk_size: int = CHUNK_SIZE,

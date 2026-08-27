@@ -8,6 +8,7 @@ which is kept in memory as a global (fine for a single-user demo).
 
 import os
 import shutil
+import time
 from typing import List, Optional
 
 from fastapi import FastAPI, UploadFile, File
@@ -25,6 +26,14 @@ from backend.rag.pipeline import (
 load_dotenv()
 
 app = FastAPI(title="LSPP RAG Chatbot API")
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 UPLOAD_DIR = "uploaded_pdfs"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -81,12 +90,15 @@ async def ask_question(req: AskRequest):
 
     docs = retriever.invoke(standalone_question)
     context = format_docs(docs)
-
+    
     def generate():
         for chunk in answer_chain.stream({"context": context, "question": standalone_question}):
             yield chunk
+            time.sleep(0.15)  # slows it down enough to see clearly
         citations = format_citations(docs)
         if citations:
             yield "\n\n" + citations
+
+    return StreamingResponse(generate(), media_type="text/plain")
 
     return StreamingResponse(generate(), media_type="text/plain")
