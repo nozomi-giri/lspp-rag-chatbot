@@ -94,3 +94,12 @@ def build_pipeline_from_pdf(pdf_path: str, chunk_size: int = CHUNK_SIZE,
     chunks = chunk_documents(pages, chunk_size, chunk_overlap)
     vectorstore = build_vectorstore(chunks)
     return build_qa_chain(vectorstore, k)
+
+def build_pipeline_from_pdf_v2(pdf_path: str, pages_needing_fix=None,
+                                chunk_size: int = CHUNK_SIZE,
+                                chunk_overlap: int = CHUNK_OVERLAP, k: int = RETRIEVAL_K):
+    from backend.rag.extraction import load_pdf_with_layout_fix  # avoids circular import
+    pages = load_pdf_with_layout_fix(pdf_path, pages_needing_fix=pages_needing_fix)
+    chunks = chunk_documents(pages, chunk_size, chunk_overlap)
+    vectorstore = build_vectorstore(chunks)
+    return build_qa_chain(vectorstore, k)

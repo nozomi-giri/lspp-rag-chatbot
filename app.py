@@ -38,15 +38,24 @@ def answer_question(chain, question, history):
             {"role": "user", "content": question},
             {"role": "assistant", "content": "Please upload a PDF first."},
         ]
-        return history, ""
+        yield history, ""
+        return
+
     if not question.strip():
-        return history, ""
-    answer = chain.invoke(question)
+        yield history, ""
+        return
+
+    # add the user's question and an empty assistant slot immediately,
+    # then fill that slot in progressively as chunks arrive
     history = history + [
         {"role": "user", "content": question},
-        {"role": "assistant", "content": answer},
+        {"role": "assistant", "content": ""},
     ]
-    return history, ""
+    yield history, ""
+
+    for chunk in chain.stream(question):
+        history[-1]["content"] += chunk
+        yield history, ""
 
 with gr.Blocks(title="LSPP RAG Chatbot — Level 1") as demo:
     gr.Markdown("## LSPP RAG Chatbot (Level 1: Bring Your Own PDF)")

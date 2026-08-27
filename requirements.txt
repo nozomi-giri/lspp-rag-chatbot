@@ -6,6 +6,7 @@ langchain-google-genai       # Gemini chat + embeddings via LangChain
 pypdf                        # backend used by PyPDFLoader
 faiss-cpu                    # vector store
 gradio                       # UI
+pdfplumber
 
 # --- Env / config ---
 python-dotenv
