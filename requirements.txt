@@ -1,0 +1,11 @@
+# --- Core RAG stack (Level 1) ---
+langchain
+langchain-community          # PyPDFLoader lives here
+langchain-text-splitters     # RecursiveCharacterTextSplitter lives here (langchain 1.x)
+langchain-google-genai       # Gemini chat + embeddings via LangChain
+pypdf                        # backend used by PyPDFLoader
+faiss-cpu                    # vector store
+gradio                       # UI
+
+# --- Env / config ---
+python-dotenv
