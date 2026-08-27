@@ -7,6 +7,9 @@ pypdf                        # backend used by PyPDFLoader
 faiss-cpu                    # vector store
 gradio                       # UI
 pdfplumber
+fastapi
+uvicorn[standard]
+python-multipart
 
 # --- Env / config ---
 python-dotenv
